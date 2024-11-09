@@ -11,6 +11,8 @@ namespace MiniProject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            //builder.Services.AddDalServices(builder.Configuration);
+
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default"), builder => 
@@ -25,6 +27,15 @@ namespace MiniProject
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            //    await appDbContext.Database.MigrateAsync();
+            //    //var dataInit=new DataInit(appDbContext);
+            //    //await dataInit.SeedDataAsync();
+
+            //}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

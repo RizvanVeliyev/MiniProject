@@ -2,7 +2,7 @@
 
 namespace Pustok.DAL.Repositories.Contracts
 {
-    public interface ISliderRepository : IRepository<BasketItem>
+    public interface ISliderRepository : IRepository<Slider>
     {
     }
 }

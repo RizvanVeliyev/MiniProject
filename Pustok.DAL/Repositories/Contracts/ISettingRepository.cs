@@ -2,7 +2,7 @@
 
 namespace Pustok.DAL.Repositories.Contracts
 {
-    public interface ISettingRepository : IRepository<BasketItem>
+    public interface ISettingRepository : IRepository<Setting>
     {
     }
 }

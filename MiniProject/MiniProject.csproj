@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Pustok.Core\Pustok.Core.csproj" />
     <ProjectReference Include="..\Pustok.DAL\Pustok.DAL.csproj" />
   </ItemGroup>
 
