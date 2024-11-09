@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Pustok.DAL.DataContexts;
+using Pustok.DAL;
 
 namespace MiniProject
 {
@@ -11,7 +12,7 @@ namespace MiniProject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            //builder.Services.AddDalServices(builder.Configuration);
+            builder.Services.AddDalServices(builder.Configuration);
 
 
             builder.Services.AddDbContext<AppDbContext>(options =>
