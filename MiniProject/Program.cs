@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Pustok.DAL.DataContexts;
 using Pustok.DAL;
+using Pustok.BLL;
 
 namespace MiniProject
 {
@@ -13,10 +14,11 @@ namespace MiniProject
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDalServices(builder.Configuration);
+            builder.Services.AddBllServices(builder.Configuration);
 
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("Default"), builder => 
+            options.UseSqlServer(builder.Configuration.GetConnectionString("Default"), builder =>
             builder.MigrationsAssembly(nameof(MiniProject))));
 
             var app = builder.Build();
@@ -46,8 +48,14 @@ namespace MiniProject
             app.UseAuthorization();
 
             app.MapControllerRoute(
+             name: "areas",
+             pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+         
 
             app.Run();
         }
