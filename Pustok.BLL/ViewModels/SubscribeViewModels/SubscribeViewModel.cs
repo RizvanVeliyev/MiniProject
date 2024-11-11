@@ -6,5 +6,6 @@
         public int Id { get; set; }
         public string? Email { get; set; }
         public bool IsSubscribed { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

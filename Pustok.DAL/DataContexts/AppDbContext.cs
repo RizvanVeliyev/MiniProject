@@ -28,6 +28,17 @@ namespace Pustok.DAL.DataContexts
         //    base.OnModelCreating(modelBuilder);
         //}
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Category>()
+                .HasOne(c => c.Parent)
+                .WithMany(c => c.Children)
+                .HasForeignKey(c => c.ParentId)
+                .OnDelete(DeleteBehavior.Restrict); 
+        }
     }
 
    

@@ -1,0 +1,19 @@
+﻿@model SubscribeUpdateViewModel
+<div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-description">
+                Subscribe
+            </p>
+            <form class="forms-sample" method="post">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input asp-for="Email" class="form-control" placeholder="Email">
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <a asp-action="index" class="btn btn-primary">Back to list</a>
+            </form>
+        </div>
+    </div>
+</div>

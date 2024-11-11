@@ -8,6 +8,9 @@
         public decimal Price { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
+
+        public bool isDeleted { get; set; } = false;
+
     }
 
 }

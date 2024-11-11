@@ -150,6 +150,9 @@ namespace Pustok.DAL.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
@@ -172,6 +175,9 @@ namespace Pustok.DAL.Migrations
                     b.Property<string>("IconUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -229,6 +235,9 @@ namespace Pustok.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Sliders");
@@ -249,6 +258,9 @@ namespace Pustok.DAL.Migrations
                     b.Property<bool>("IsSubscribed")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Subscribes");
@@ -262,7 +274,7 @@ namespace Pustok.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -311,8 +323,9 @@ namespace Pustok.DAL.Migrations
             modelBuilder.Entity("Pustok.Core.Entities.Category", b =>
                 {
                     b.HasOne("Pustok.Core.Entities.Category", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId");
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Parent");
                 });
@@ -360,6 +373,8 @@ namespace Pustok.DAL.Migrations
 
             modelBuilder.Entity("Pustok.Core.Entities.Category", b =>
                 {
+                    b.Navigation("Children");
+
                     b.Navigation("Products");
                 });
 

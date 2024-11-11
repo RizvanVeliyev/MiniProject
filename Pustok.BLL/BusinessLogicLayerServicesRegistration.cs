@@ -27,7 +27,7 @@ namespace Pustok.BLL
             services.AddScoped<ITagService, TagManager>();
             services.AddScoped<IBasketItemService, BasketItemManager>();
             services.AddScoped<IHomeService, HomeManager>();
-            //services.AddScoped<CloudinaryManager>();
+            services.AddScoped<CloudinaryManager>();
 
 
             return services;

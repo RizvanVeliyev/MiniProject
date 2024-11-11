@@ -53,19 +53,21 @@ namespace Pustok.DAL.Repositories
             return result;
         }
 
-        public virtual async Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
+        public virtual async Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, bool IsTracking = true)
         {
             var query = Query();
 
             if (predicate != null)
                 query = query.Where(predicate);
+
+            if (!IsTracking)
+                query = query.AsNoTracking();
+
             if (include != null)
                 query = include(query);
+
             if (orderBy != null)
                 query = orderBy(query);
-
-
-
 
 
             var result = await query.FirstOrDefaultAsync();

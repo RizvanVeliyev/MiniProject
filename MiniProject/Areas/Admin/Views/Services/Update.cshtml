@@ -1,0 +1,29 @@
+﻿@model ServiceUpdateViewModel
+<div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-description">
+                Subscribe
+            </p>
+            <form class="forms-sample" method="post">
+                <div class="form-group">
+                    <label asp-for="Title">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="Title">
+                    <span asp-validation-for="Title"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description">Title</label>
+                    <input asp-for="Description" class="form-control" placeholder="Description">
+                    <span asp-validation-for="Description"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="IconUrl">Title</label>
+                    <input asp-for="IconUrl" class="form-control" placeholder="IconUrl">
+                    <span asp-validation-for="IconUrl"></span>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <a asp-action="index" class="btn btn-primary">Back to list</a>
+            </form>
+        </div>
+    </div>
+</div>
