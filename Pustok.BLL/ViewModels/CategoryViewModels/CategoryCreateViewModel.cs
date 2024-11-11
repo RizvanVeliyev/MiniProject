@@ -9,7 +9,7 @@ namespace Pustok.BLL.ViewModels.CategoryViewModels
         public string? ImageUrl { get; set; }
         public IFormFile? ImageFile { get; set; }
         public int? ParentId { get; set; }
-        public IEnumerable<SelectListItem>? ParentCategories { get; set; }
+        public List<SelectListItem>? ParentCategories { get; set; }
 
 
     }

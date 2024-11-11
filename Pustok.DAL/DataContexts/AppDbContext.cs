@@ -22,5 +22,14 @@ namespace Pustok.DAL.DataContexts
         public DbSet<TagProduct> TagProducts { get; set; }
 
 
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Tag>().HasQueryFilter(t => !t.IsDeleted);
+        //    base.OnModelCreating(modelBuilder);
+        //}
+
     }
+
+   
+
 }

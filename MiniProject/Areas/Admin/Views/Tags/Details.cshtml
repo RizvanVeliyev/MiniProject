@@ -1,0 +1,18 @@
+﻿@model TagViewModel
+
+<div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-description">
+                Category Details
+            </p>
+
+            <div class="form-group">
+                <label>Name</label>
+                <p class="form-control-static">@Model.Name</p>
+            </div>
+
+            <a asp-action="index" class="btn btn-primary">Back to list</a>
+        </div>
+    </div>
+</div>

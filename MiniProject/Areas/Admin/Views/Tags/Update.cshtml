@@ -1,0 +1,19 @@
+﻿@model TagUpdateViewModel
+<div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-description">
+                Category
+            </p>
+            <form class="forms-sample" method="post">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Name">
+                    <span asp-validation-for="Name"></span>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light" asp-action="index">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
