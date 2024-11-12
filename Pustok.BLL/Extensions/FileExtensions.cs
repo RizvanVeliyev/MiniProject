@@ -23,5 +23,19 @@ namespace Pustok.BLL.Extensions
                 await file.CopyToAsync(fs);
             return name;
         }
+
+        //public static async Task<string> CreateImageAsync(this IFormFile file, string path)
+        //{
+        //    string filename = Guid.NewGuid() + file.FileName;
+
+        //    path = Path.Combine(path, filename);
+
+        //    using (FileStream stream = new(path, FileMode.CreateNew))
+        //    {
+        //        await file.CopyToAsync(stream);
+        //    }
+
+        //    return filename;
+        //}
     }
 }

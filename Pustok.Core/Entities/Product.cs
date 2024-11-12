@@ -13,6 +13,7 @@
         public bool IsDeleted { get; set; }
         public int StockQuantity { get; set; }
         public decimal Rating { get; set; }
+        public List<ProductImage> ProductImages { get; set; } = new();
         public int CategoryId { get; set; }
         public required Category Category { get; set; }
         public decimal Tax { get; set; }

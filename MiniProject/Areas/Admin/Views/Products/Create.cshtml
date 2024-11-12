@@ -1,0 +1,82 @@
+﻿@model ProductCreateViewModel
+<div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-description">
+                Product
+            </p>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Name">
+                    <span asp-validation-for="Name"></span>
+                </div>
+                <div class="form-group">
+                    <label>Image</label>
+                    <input asp-for="MainImage" class="form-control" type="file" placeholder="image">
+                    <span asp-validation-for="MainImage"></span>
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input asp-for="Price" class="form-control" placeholder="Price" type="number">
+                    <span asp-validation-for="Price"></span>
+                </div>
+                <div class="form-group">
+                    <label>ProductCode</label>
+                    <input asp-for="ProductCode" class="form-control" placeholder="ProductCode">
+                    <span asp-validation-for="ProductCode"></span>
+                </div>
+                <div class="form-group">
+                    <label>Brand</label>
+                    <input asp-for="Brand" class="form-control" placeholder="Brand">
+                    <span asp-validation-for="Brand"></span>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input asp-for="Description" class="form-control" placeholder="Description">
+                    <span asp-validation-for="Description"></span>
+                </div>
+                <div class="form-group">
+                    <label>DiscountPrice</label>
+                    <input asp-for="DiscountPrice" class="form-control" placeholder="DiscountPrice">
+                    <span asp-validation-for="DiscountPrice"></span>
+                </div>
+                <div class="form-group">
+                    <label>Color</label>
+                    <input asp-for="Color" class="form-control" placeholder="Color">
+                    <span asp-validation-for="Color"></span>
+                </div>
+                <div class="form-group">
+                    <label>StockQuantity</label>
+                    <input asp-for="StockQuantity" class="form-control" placeholder="StockQuantity">
+                    <span asp-validation-for="StockQuantity"></span>
+                </div>
+                <div class="form-group">
+                    <label>Rating</label>
+                    <input asp-for="Rating" class="form-control" placeholder="Rating">
+                    <span asp-validation-for="Rating"></span>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input asp-for="CategoryId" class="form-control" placeholder="Category">
+                    <span asp-validation-for="CategoryId"></span>
+                </div>
+                <div class="form-group">
+                    <label>Tax</label>
+                    <input asp-for="Tax" class="form-control" placeholder="Tax">
+                    <span asp-validation-for="Tax"></span>
+                </div>
+                <div class="form-group">
+                    <label>RewardPoint</label>
+                    <input asp-for="RewardPoint" class="form-control" placeholder="RewardPoint">
+                    <span asp-validation-for="RewardPoint"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light" asp-action="index">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+

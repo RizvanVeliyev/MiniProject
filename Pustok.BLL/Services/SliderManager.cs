@@ -2,10 +2,8 @@
 using Pustok.BLL.Exceptions;
 using Pustok.BLL.Extensions;
 using Pustok.BLL.Services.Contracts;
-using Pustok.BLL.ViewModels.CategoryViewModels;
 using Pustok.BLL.ViewModels.SliderViewModels;
 using Pustok.Core.Entities;
-using Pustok.DAL.Repositories;
 using Pustok.DAL.Repositories.Contracts;
 
 namespace Pustok.BLL.Services

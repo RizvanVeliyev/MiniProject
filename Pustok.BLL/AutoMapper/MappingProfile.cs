@@ -2,6 +2,7 @@
 using Pustok.BLL.ViewModels.BasketItemViewModels;
 using Pustok.BLL.ViewModels.CategoryViewModels;
 using Pustok.BLL.ViewModels.ProductImageViewModels;
+using Pustok.BLL.ViewModels.ProductViewModels;
 using Pustok.BLL.ViewModels.ServiceViewModels;
 using Pustok.BLL.ViewModels.SettingViewModels;
 using Pustok.BLL.ViewModels.SliderViewModels;
@@ -46,6 +47,10 @@ namespace Pustok.BLL.AutoMapper
             CreateMap<Tag, TagViewModel>().ReverseMap();
             CreateMap<Tag, TagCreateViewModel>().ReverseMap();
             CreateMap<Tag, TagUpdateViewModel>().ReverseMap();
+
+            CreateMap<Product, ProductViewModel>().ReverseMap();
+            CreateMap<Product, ProductCreateViewModel>().ReverseMap();
+            CreateMap<Product, ProductUpdateViewModel>().ReverseMap();
         }
     }
 }

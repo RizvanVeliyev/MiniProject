@@ -2,7 +2,8 @@
 {
     public class ProductImage : BaseEntity
     {
-        public required string ImageUrl { get; set; } 
+
+        public string Path { get; set; } = null!;
         public bool IsMain { get; set; } 
         public int ProductId { get; set; }
         public bool isDeleted { get; set; } = false;

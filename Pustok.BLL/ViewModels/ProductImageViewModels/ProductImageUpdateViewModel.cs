@@ -5,6 +5,7 @@ namespace Pustok.BLL.ViewModels.ProductImageViewModels
 {
     public class ProductImageUpdateViewModel:IViewModel
     {
+
         public required IFormFile ImageFile { get; set; }
         public required string ImageUrl { get; set; }
         public bool IsMain { get; set; }
