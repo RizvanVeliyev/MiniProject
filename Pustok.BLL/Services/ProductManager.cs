@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Pustok.BLL.Extensions;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.ProductViewModels;
 using Pustok.Core.Entities;
 using Pustok.DAL.Repositories.Contracts;
-using System.Web.Mvc;
 
 namespace Pustok.BLL.Services
 {
@@ -55,57 +52,60 @@ namespace Pustok.BLL.Services
 
 
 
-            Product product = new()
-            {
-                Name = createViewModel.Name,
-                Price = createViewModel.Price,
-                ProductCode=createViewModel.ProductCode,
-                Brand=createViewModel.Brand,
-                Description=createViewModel.Description,
-                DiscountPrice=createViewModel.DiscountPrice,
-                Color=createViewModel.Color,
-                StockQuantity=createViewModel.StockQuantity,
-                Rating = createViewModel.Rating,
-                Tax=createViewModel.Tax,
-                RewardPoint=createViewModel.RewardPoint,
-                Category=createViewModel.Category,
-               
-            };
+            //Product product = new()
+            //{
+            //    Name = createViewModel.Name,
+            //    Price = createViewModel.Price,
+            //    ProductCode=createViewModel.ProductCode,
+            //    Brand=createViewModel.Brand,
+            //    Description=createViewModel.Description,
+            //    DiscountPrice=createViewModel.DiscountPrice,
+            //    Color=createViewModel.Color,
+            //    StockQuantity=createViewModel.StockQuantity,
+            //    Rating = createViewModel.Rating,
+            //    Tax=createViewModel.Tax,
+            //    RewardPoint=createViewModel.RewardPoint,
+            //    Category=createViewModel.Category,
+
+            //};
 
 
 
-            var mainImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
+            //var mainImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
 
-            ProductImage mainImage = new()
-            {
-                IsMain = true,
-                Path = mainImagePath,
-                Product = product
-            };
+            //ProductImage mainImage = new()
+            //{
+            //    IsMain = true,
+            //    Path = mainImagePath,
+            //    Product = product
+            //};
 
-            product.ProductImages.Add(mainImage);
+            //product.ProductImages.Add(mainImage);
 
 
-            
 
-            foreach (var image in createViewModel.AdditionalImages)
-            {
-                var ImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
 
-                ProductImage productImg = new()
-                {
-                    Path = ImagePath,
-                    Product = product
-                };
+            //foreach (var image in createViewModel.AdditionalImages)
+            //{
+            //    var ImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
 
-                product.ProductImages.Add(productImg);
+            //    ProductImage productImg = new()
+            //    {
+            //        Path = ImagePath,
+            //        Product = product
+            //    };
 
-            }
+            //    product.ProductImages.Add(productImg);
 
-            //var imageName = await createViewModel.ImageFile.GenerateFile(FilePathConstants.CategoryImagePath);
+            //}
 
+            ////var imageName = await createViewModel.ImageFile.GenerateFile(FilePathConstants.CategoryImagePath);
+
+            //var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
+            ////createViewModel.ImageUrl = imageName;
+            ///
             var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-            //createViewModel.ImageUrl = imageName;
+            createViewModel.ImageUrl = imageName;
 
             return await base.CreateAsync(createViewModel);
         }

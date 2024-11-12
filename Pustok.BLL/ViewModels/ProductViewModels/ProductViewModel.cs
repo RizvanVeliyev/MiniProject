@@ -20,6 +20,7 @@ namespace Pustok.BLL.ViewModels.ProductViewModels
         public int CategoryId { get; set; }
         public required Category Category { get; set; }
         public decimal Tax { get; set; }
+        public required string ImageUrl { get; set; }
         public int RewardPoint { get; set; }
         public ICollection<TagProduct>? ProductTags { get; set; }
         public IFormFile? MainImage { get; set; }

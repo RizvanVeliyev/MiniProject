@@ -11,6 +11,7 @@ namespace Pustok.BLL.ViewModels.ProductViewModels
         public string? Brand { get; set; }
         public string? Description { get; set; }
         public decimal? DiscountPrice { get; set; }
+        public required string ImageUrl { get; set; }
         public string? Color { get; set; }
         public bool InStock { get; set; }
         public int StockQuantity { get; set; }
