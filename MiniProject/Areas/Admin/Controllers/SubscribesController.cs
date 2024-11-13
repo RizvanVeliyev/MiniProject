@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.SubscribeViewModels;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,Moderator")]
+
     public class SubscribesController : AdminController
     {
         private readonly ISubscribeService _subscribeService;
@@ -37,6 +40,7 @@ namespace MiniProject.Areas.Admin.Controllers
             await _subscribeService.CreateAsync(model);
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Details(int id)
         {
@@ -65,6 +69,8 @@ namespace MiniProject.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _subscribeService.DeleteAsync(id);

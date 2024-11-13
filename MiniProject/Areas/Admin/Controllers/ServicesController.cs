@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.ServiceViewModels;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,Moderator")]
+
     public class ServicesController : AdminController
     {
         private readonly IServiceService _serviceService;
@@ -58,6 +61,8 @@ namespace MiniProject.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _serviceService.DeleteAsync(id);

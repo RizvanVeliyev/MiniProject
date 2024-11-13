@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.CategoryViewModels;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,Moderator")]
+
     public class CategoryController : AdminController
     {
         private readonly ICategoryService _categoryService;

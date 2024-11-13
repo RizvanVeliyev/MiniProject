@@ -1,0 +1,9 @@
+﻿@model LoginViewModel
+<form method="post">
+    <div asp-validation-summary="All">
+    </div>
+    <input asp-for="EmailOrUserName" />
+    <input asp-for="Password" />
+    <input asp-for="SaveMe" type="checkbox" />
+    <button type="submit">Submit</button>
+</form>

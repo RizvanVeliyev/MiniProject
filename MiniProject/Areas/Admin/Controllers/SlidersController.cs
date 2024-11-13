@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.CategoryViewModels;
 using Pustok.BLL.ViewModels.SliderViewModels;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,Moderator")]
+
     public class SlidersController : AdminController
     {
         private readonly ISliderService _sliderService;
@@ -59,6 +62,8 @@ namespace MiniProject.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _sliderService.DeleteAsync(id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.ProductViewModels;
@@ -6,6 +7,8 @@ using Pustok.DAL.DataContexts;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,Moderator")]
+
     public class ProductsController : AdminController
     {
         private readonly AppDbContext _context;

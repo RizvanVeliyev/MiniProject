@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.TagViewModels;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,Moderator")]
     public class TagsController : AdminController
     {
         private readonly ITagService _tagService;
@@ -38,6 +40,8 @@ namespace MiniProject.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")] 
+
         public async Task<IActionResult> Details(int id)
         {
             var tag= await _tagService.GetAsync(id);
@@ -65,6 +69,9 @@ namespace MiniProject.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int id)
         {
             await _tagService.DeleteAsync(id);

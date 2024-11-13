@@ -1,0 +1,14 @@
+﻿@model RegisterViewModel
+
+@{
+    Layout = null; 
+}
+
+<form method="post">
+    <div asp-validation-summary="All">
+    </div>
+    <input asp-for="Email" />
+    <input asp-for="Username" />
+    <input asp-for="Password" />
+    <button type="submit">Submit</button>
+</form>

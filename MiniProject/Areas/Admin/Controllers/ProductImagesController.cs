@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.ProductImageViewModels;
@@ -6,6 +7,8 @@ using Pustok.BLL.ViewModels.TagViewModels;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,Moderator")]
+
     public class ProductImagesController : AdminController
     {
         private readonly IProductImageService _productImageService;
