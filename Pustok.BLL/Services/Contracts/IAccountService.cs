@@ -1,5 +1,5 @@
-﻿using Pustok.BLL.ViewModels.AppUserViewModels;
-using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Pustok.BLL.ViewModels.AppUserViewModels;
 
 namespace Pustok.BLL.Services.Contracts
 {

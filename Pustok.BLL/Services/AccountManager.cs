@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Pustok.BLL.Exceptions;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.AppUserViewModels;
 using Pustok.Core.Entities;
-using System.Web.Mvc;
 
 namespace Pustok.BLL.Services
 {
