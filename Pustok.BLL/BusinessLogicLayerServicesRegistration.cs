@@ -28,6 +28,8 @@ namespace Pustok.BLL
             services.AddScoped<IBasketItemService, BasketItemManager>();
             services.AddScoped<IHomeService, HomeManager>();
             services.AddScoped<CloudinaryManager>();
+            services.AddScoped<IAccountService, AccountManager>();
+
 
 
             return services;

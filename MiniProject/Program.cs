@@ -7,7 +7,7 @@ namespace MiniProject
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +17,22 @@ namespace MiniProject
             builder.Services.AddBllServices(builder.Configuration);
 
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("Default"), builder =>
-            builder.MigrationsAssembly(nameof(MiniProject))));
+            //builder.Services.AddDbContext<AppDbContext>(options =>
+            //options.UseSqlServer(builder.Configuration.GetConnectionString("Default"), builder =>
+            //builder.MigrationsAssembly(nameof(MiniProject))));
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                //var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                //await appDbContext.Database.MigrateAsync();
+                //var dataInit = new DataInitalizer(appDbContext,);
+                //await dataInit.SeedDataAsync();
+
+                var initalizer = scope.ServiceProvider.GetRequiredService<DataInit>();
+                await initalizer.SeedDataAsync();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -57,7 +68,7 @@ namespace MiniProject
 
          
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }

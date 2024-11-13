@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pustok.DAL.DataContexts;
 using Pustok.DAL.Repositories.Contracts;
 using Pustok.DAL.Repositories;
+using Pustok.Core.Entities;
 
 namespace Pustok.DAL
 {
@@ -18,6 +20,20 @@ namespace Pustok.DAL
                 builder.MigrationsAssembly("Pustok.DAL");
             }));
 
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 3;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+
+                options.User.RequireUniqueEmail = true;
+
+                options.Lockout.MaxFailedAccessAttempts = 7;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -29,6 +45,8 @@ namespace Pustok.DAL
             services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IProductImageRepository, ProductImageRepository>();
             services.AddScoped<ISettingRepository, SettingRepository>();
+            services.AddScoped<DataInit>();
+
 
 
             return services;

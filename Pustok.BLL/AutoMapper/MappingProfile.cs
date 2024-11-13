@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Pustok.BLL.ViewModels.AppUserViewModels;
 using Pustok.BLL.ViewModels.BasketItemViewModels;
 using Pustok.BLL.ViewModels.CategoryViewModels;
 using Pustok.BLL.ViewModels.ProductImageViewModels;
@@ -51,6 +52,9 @@ namespace Pustok.BLL.AutoMapper
             CreateMap<Product, ProductViewModel>().ReverseMap();
             CreateMap<Product, ProductCreateViewModel>().ReverseMap();
             CreateMap<Product, ProductUpdateViewModel>().ReverseMap();
+
+            CreateMap<AppUser, RegisterViewModel>().ReverseMap();
+            CreateMap<AppUser, LoginViewModel>().ReverseMap();
         }
     }
 }

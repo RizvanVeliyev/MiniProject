@@ -20,9 +20,9 @@ namespace Pustok.BLL.Services
             _cloudinaryManager = cloudinaryManager;
 
         }
-
         public override async Task<ProductViewModel> CreateAsync(ProductCreateViewModel createViewModel)
         {
+            // Check if main image is valid
             if (!createViewModel.MainImage.IsImage())
             {
                 throw new Exception("Not an Image");
@@ -33,13 +33,12 @@ namespace Pustok.BLL.Services
                 throw new Exception("Invalid image size");
             }
 
-
+            // Check additional images
             foreach (var image in createViewModel.AdditionalImages)
             {
                 if (!image.IsImage())
                 {
                     throw new Exception("Not an Image");
-
                 }
 
                 if (!image.AllowedSize(2))
@@ -48,67 +47,127 @@ namespace Pustok.BLL.Services
                 }
             }
 
+            // Map ProductCreateViewModel to Product entity using AutoMapper
+            Product product = _mapper.Map<Product>(createViewModel);
 
+            // Upload main image and set as primary
+            var mainImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
+            ProductImage mainImage = new()
+            {
+                IsMain = true,
+                Path = mainImagePath,
+                Product = product
+            };
+            product.ProductImages.Add(mainImage);
 
+            // Upload additional images
+            foreach (var image in createViewModel.AdditionalImages)
+            {
+                var imagePath = await _cloudinaryManager.FileCreateAsync(image);
+                ProductImage additionalImage = new()
+                {
+                    IsMain = false,
+                    Path = imagePath,
+                    Product = product
+                };
+                product.ProductImages.Add(additionalImage);
+            }
 
-
-            //Product product = new()
-            //{
-            //    Name = createViewModel.Name,
-            //    Price = createViewModel.Price,
-            //    ProductCode=createViewModel.ProductCode,
-            //    Brand=createViewModel.Brand,
-            //    Description=createViewModel.Description,
-            //    DiscountPrice=createViewModel.DiscountPrice,
-            //    Color=createViewModel.Color,
-            //    StockQuantity=createViewModel.StockQuantity,
-            //    Rating = createViewModel.Rating,
-            //    Tax=createViewModel.Tax,
-            //    RewardPoint=createViewModel.RewardPoint,
-            //    Category=createViewModel.Category,
-
-            //};
-
-
-
-            //var mainImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-
-            //ProductImage mainImage = new()
-            //{
-            //    IsMain = true,
-            //    Path = mainImagePath,
-            //    Product = product
-            //};
-
-            //product.ProductImages.Add(mainImage);
-
-
-
-
-            //foreach (var image in createViewModel.AdditionalImages)
-            //{
-            //    var ImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-
-            //    ProductImage productImg = new()
-            //    {
-            //        Path = ImagePath,
-            //        Product = product
-            //    };
-
-            //    product.ProductImages.Add(productImg);
-
-            //}
-
-            ////var imageName = await createViewModel.ImageFile.GenerateFile(FilePathConstants.CategoryImagePath);
-
-            //var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-            ////createViewModel.ImageUrl = imageName;
-            ///
-            var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-            createViewModel.ImageUrl = imageName;
-
-            return await base.CreateAsync(createViewModel);
+            // Save the product using the base method
+            //var productLastVersion = _mapper.Map<ProductCreateViewModel, Product>(createViewModel);
+            var createdProductViewModel = await base.CreateAsync(createViewModel);
+            return createdProductViewModel;
         }
+
+
+        //public override async Task<ProductViewModel> CreateAsync(ProductCreateViewModel createViewModel)
+        //{
+        //    if (!createViewModel.MainImage.IsImage())
+        //    {
+        //        throw new Exception("Not an Image");
+        //    }
+
+        //    if (!createViewModel.MainImage.AllowedSize(2))
+        //    {
+        //        throw new Exception("Invalid image size");
+        //    }
+
+
+        //    foreach (var image in createViewModel.AdditionalImages)
+        //    {
+        //        if (!image.IsImage())
+        //        {
+        //            throw new Exception("Not an Image");
+
+        //        }
+
+        //        if (!image.AllowedSize(2))
+        //        {
+        //            throw new Exception("Invalid image size");
+        //        }
+        //    }
+
+
+
+
+
+        //    //Product product = new()
+        //    //{
+        //    //    Name = createViewModel.Name,
+        //    //    Price = createViewModel.Price,
+        //    //    ProductCode=createViewModel.ProductCode,
+        //    //    Brand=createViewModel.Brand,
+        //    //    Description=createViewModel.Description,
+        //    //    DiscountPrice=createViewModel.DiscountPrice,
+        //    //    Color=createViewModel.Color,
+        //    //    StockQuantity=createViewModel.StockQuantity,
+        //    //    Rating = createViewModel.Rating,
+        //    //    Tax=createViewModel.Tax,
+        //    //    RewardPoint=createViewModel.RewardPoint,
+        //    //    Category=createViewModel.Category,
+
+        //    //};
+
+
+
+        //    //var mainImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
+
+        //    //ProductImage mainImage = new()
+        //    //{
+        //    //    IsMain = true,
+        //    //    Path = mainImagePath,
+        //    //    Product = product
+        //    //};
+
+        //    //product.ProductImages.Add(mainImage);
+
+
+
+
+        //    //foreach (var image in createViewModel.AdditionalImages)
+        //    //{
+        //    //    var ImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
+
+        //    //    ProductImage productImg = new()
+        //    //    {
+        //    //        Path = ImagePath,
+        //    //        Product = product
+        //    //    };
+
+        //    //    product.ProductImages.Add(productImg);
+
+        //    //}
+
+        //    ////var imageName = await createViewModel.ImageFile.GenerateFile(FilePathConstants.CategoryImagePath);
+
+        //    //var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
+        //    ////createViewModel.ImageUrl = imageName;
+        //    ///
+        //    var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
+        //    createViewModel.ImageUrl = imageName;
+
+        //    return await base.CreateAsync(createViewModel);
+        //}
 
         //public async Task<IActionResult> Update(int id)
         //{
