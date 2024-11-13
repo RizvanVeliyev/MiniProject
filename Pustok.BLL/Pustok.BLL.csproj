@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Pustok.DAL\Pustok.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
-
 </Project>

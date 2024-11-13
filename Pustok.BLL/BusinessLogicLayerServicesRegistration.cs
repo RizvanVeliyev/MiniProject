@@ -2,12 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Pustok.BLL.UI.Services.Contracts;
+using Pustok.BLL.UI.Services;
 
 namespace Pustok.BLL
 {

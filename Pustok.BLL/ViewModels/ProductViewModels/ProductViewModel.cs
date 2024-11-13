@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Pustok.BLL.ViewModels.ProductImageViewModels;
 using Pustok.Core.Entities;
 
 namespace Pustok.BLL.ViewModels.ProductViewModels
@@ -24,6 +25,8 @@ namespace Pustok.BLL.ViewModels.ProductViewModels
         public int RewardPoint { get; set; }
         public ICollection<TagProduct>? ProductTags { get; set; }
         public IFormFile? MainImage { get; set; }
+        public List<ProductImageViewModel>? ProductImages { get; set; }
+
         public string? MainImagePath { get; set; }
         public List<IFormFile> AdditionalImages { get; set; } = new();
         public List<string>? AdditionalImagePaths { get; set; } = new();

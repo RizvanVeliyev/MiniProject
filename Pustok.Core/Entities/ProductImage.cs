@@ -6,7 +6,8 @@
         public string Path { get; set; } = null!;
         public bool IsMain { get; set; } 
         public int ProductId { get; set; }
+        //public required string ImageUrl { get; set; }
         public bool isDeleted { get; set; } = false;
-        public required Product Product { get; set; }
+        public Product? Product { get; set; }
     }
 }

@@ -4,7 +4,7 @@
     {
         public int ProductId { get; set; }
         public required string UserId { get; set; }
-        public int Quantity { get; set; }
+        public int Count { get; set; }
         public decimal Price { get; set; }
     }
 }
