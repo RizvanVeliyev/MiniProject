@@ -4,11 +4,11 @@ using Pustok.BLL.ViewModels.AppUserViewModels;
 
 namespace MiniProject.Controllers
 {
-    public class AccountsController : Controller
+    public class AccountController : Controller
     {
         private readonly IAccountService _service;
 
-        public AccountsController(IAccountService service)
+        public AccountController(IAccountService service)
         {
             _service = service;
         }

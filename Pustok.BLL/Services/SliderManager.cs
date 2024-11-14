@@ -65,8 +65,10 @@ namespace Pustok.BLL.Services
             if (slider is null)
                 throw new NotFoundException($"{id}-this category is not found");
 
-            SliderUpdateViewModel vm = new() { Title = "" ,Description="",Price=0,ImageUrl=""};
-            vm = _mapper.Map(slider, vm);
+            //SliderUpdateViewModel vm = new() { Title = "" ,Description="",Price=0,ImageUrl=""};
+            //vm = _mapper.Map(slider, vm);
+            SliderUpdateViewModel vm = _mapper.Map<SliderUpdateViewModel>(slider);
+
 
             return vm;
         }

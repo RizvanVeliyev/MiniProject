@@ -7,7 +7,7 @@ using Pustok.DAL.DataContexts;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin,Moderator")]
+    //[Authorize(Roles = "Admin,Moderator")]
 
     public class ProductsController : AdminController
     {
