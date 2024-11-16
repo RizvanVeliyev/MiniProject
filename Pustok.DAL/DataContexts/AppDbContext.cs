@@ -37,7 +37,7 @@ namespace Pustok.DAL.DataContexts
 
             modelBuilder.Entity<Category>()
                 .HasOne(c => c.Parent)
-                .WithMany(c => c.Children)
+                .WithMany(c => c.Parents)
                 .HasForeignKey(c => c.ParentId)
                 .OnDelete(DeleteBehavior.Restrict); 
         }

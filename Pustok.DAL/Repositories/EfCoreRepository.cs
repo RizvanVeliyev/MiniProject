@@ -49,7 +49,7 @@ namespace Pustok.DAL.Repositories
         public virtual async Task<T?> GetAsync(int id)
         {
             var query = Query();
-            var result = await query.FirstOrDefaultAsync(x => x.Id == id);
+            var result = await query.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             return result;
         }
 

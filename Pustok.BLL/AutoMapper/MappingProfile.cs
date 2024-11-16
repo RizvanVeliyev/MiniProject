@@ -24,6 +24,8 @@ namespace Pustok.BLL.AutoMapper
             CreateMap<BasketItem, BasketItemViewModel>().ReverseMap();
             CreateMap<BasketItem, BasketItemCreateViewModel>().ReverseMap();
             CreateMap<BasketItem, BasketItemUpdateViewModel>().ReverseMap();
+            CreateMap<BasketItemUpdateViewModel, BasketItem>()
+           .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.UserId)); 
 
             CreateMap<Category, CategoryViewModel>().ReverseMap();
             CreateMap<Category, CategoryCreateViewModel>().ReverseMap();

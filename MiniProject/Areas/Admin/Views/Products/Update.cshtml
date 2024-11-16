@@ -1,4 +1,4 @@
-﻿@model ProductCreateViewModel
+﻿@model ProductUpdateViewModel
 <div class="col-lg-6 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -12,10 +12,30 @@
                     <span asp-validation-for="Name"></span>
                 </div>
                 <div class="form-group">
+                    <img src="~/assets/images/@Model.MainImagePath" />
+                    <input type="hidden" asp-for="MainImagePath" />
                     <label for="exampleInputUsername1">Main image</label>
                     <input class="form-control" id="input1" asp-for="MainImage" placeholder="Name">
                     <span asp-validation-for="MainImage" class="text-danger"></span>
                 </div>
+                @for (int i = 0; i < Model.AdditionalImagePaths?.Count; i++)
+                {
+                    var imagePath = Model.AdditionalImagePaths[i];
+
+                    <div style="position: relative; display: inline-block; margin-right: 10px;">
+                        <div style="position: relative;">
+                            <img style="width: 100px; height: 100px;" class="primary-img"
+                                 src="~/assets/images/@imagePath"
+                                 alt="Product Images" />
+                            <button type="button" class="buttonRemove btn btn-danger" style="position: absolute; top: 0; right: 0; z-index: 1;">
+                                x
+                            </button>
+                            <input asp-for="AdditionalImagePaths" type="hidden" value="@imagePath" />
+                            <input asp-for="AdditionalImageIds" type="hidden" value="@Model.AdditionalImageIds[i]" />
+                        </div>
+
+                    </div>
+                }
                 <div class="form-group">
                     <label for="exampleInputUsername1">Additional image</label>
                     <input class="form-control" id="input1" asp-for="AdditionalImages" placeholder="Name">
@@ -83,5 +103,3 @@
         </div>
     </div>
 </div>
-
-

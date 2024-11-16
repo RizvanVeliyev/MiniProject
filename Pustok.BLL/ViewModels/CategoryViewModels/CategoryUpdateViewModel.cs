@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Pustok.BLL.ViewModels.CategoryViewModels
 {
@@ -6,8 +7,8 @@ namespace Pustok.BLL.ViewModels.CategoryViewModels
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public string? ImageUrl { get; set; }
-        public IFormFile? ImageFile { get; set; }
+        public List<SelectListItem>? ParentCategories { get; set; } = new List<SelectListItem>();
+
         public int? ParentId { get; set; }
     }
 }

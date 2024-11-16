@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.ProductViewModels;
+using Pustok.BLL.ViewModels.SliderViewModels;
 using Pustok.DAL.DataContexts;
 
 namespace MiniProject.Areas.Admin.Controllers
@@ -50,6 +51,27 @@ namespace MiniProject.Areas.Admin.Controllers
             await _productService.CreateAsync(vm);
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Update(int id)
+        {
+            var vm = await _productService.GetUpdatedProductAsync(id);
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(ProductUpdateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await _productService.UpdateAsync(model);
+
+            return RedirectToAction(nameof(Index));
+
         }
     }
 }

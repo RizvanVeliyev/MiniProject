@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Pustok.BLL.Exceptions;
 using Pustok.BLL.Extensions;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.ProductViewModels;
@@ -12,12 +14,14 @@ namespace Pustok.BLL.Services
         private readonly IMapper _mapper;
         private readonly CloudinaryManager _cloudinaryManager;
         private readonly IProductRepository _productRepository;
+        private readonly IProductImageRepository _productImageRepository;
         
-        public ProductManager(IProductRepository productRepository, IMapper mapper,CloudinaryManager cloudinaryManager) : base(productRepository, mapper)
+        public ProductManager(IProductRepository productRepository, IMapper mapper,CloudinaryManager cloudinaryManager,IProductImageRepository productImageRepository) : base(productRepository, mapper)
         {
             _mapper = mapper;
             _productRepository = productRepository;
             _cloudinaryManager = cloudinaryManager;
+            _productImageRepository = productImageRepository;
 
         }
         public override async Task<ProductViewModel> CreateAsync(ProductCreateViewModel createViewModel)
@@ -64,7 +68,7 @@ namespace Pustok.BLL.Services
             foreach (var image in createViewModel.AdditionalImages)
             {
                 var imagePath = await _cloudinaryManager.FileCreateAsync(image);
-                ProductImage additionalImage = new()
+                ProductImage additionalImage = new()  
                 {
                     IsMain = false,
                     Path = imagePath,
@@ -80,101 +84,12 @@ namespace Pustok.BLL.Services
         }
 
 
-        //public override async Task<ProductViewModel> CreateAsync(ProductCreateViewModel createViewModel)
-        //{
-        //    if (!createViewModel.MainImage.IsImage())
-        //    {
-        //        throw new Exception("Not an Image");
-        //    }
-
-        //    if (!createViewModel.MainImage.AllowedSize(2))
-        //    {
-        //        throw new Exception("Invalid image size");
-        //    }
-
-
-        //    foreach (var image in createViewModel.AdditionalImages)
-        //    {
-        //        if (!image.IsImage())
-        //        {
-        //            throw new Exception("Not an Image");
-
-        //        }
-
-        //        if (!image.AllowedSize(2))
-        //        {
-        //            throw new Exception("Invalid image size");
-        //        }
-        //    }
-
-
-
-
-
-        //    //Product product = new()
-        //    //{
-        //    //    Name = createViewModel.Name,
-        //    //    Price = createViewModel.Price,
-        //    //    ProductCode=createViewModel.ProductCode,
-        //    //    Brand=createViewModel.Brand,
-        //    //    Description=createViewModel.Description,
-        //    //    DiscountPrice=createViewModel.DiscountPrice,
-        //    //    Color=createViewModel.Color,
-        //    //    StockQuantity=createViewModel.StockQuantity,
-        //    //    Rating = createViewModel.Rating,
-        //    //    Tax=createViewModel.Tax,
-        //    //    RewardPoint=createViewModel.RewardPoint,
-        //    //    Category=createViewModel.Category,
-
-        //    //};
-
-
-
-        //    //var mainImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-
-        //    //ProductImage mainImage = new()
-        //    //{
-        //    //    IsMain = true,
-        //    //    Path = mainImagePath,
-        //    //    Product = product
-        //    //};
-
-        //    //product.ProductImages.Add(mainImage);
-
-
-
-
-        //    //foreach (var image in createViewModel.AdditionalImages)
-        //    //{
-        //    //    var ImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-
-        //    //    ProductImage productImg = new()
-        //    //    {
-        //    //        Path = ImagePath,
-        //    //        Product = product
-        //    //    };
-
-        //    //    product.ProductImages.Add(productImg);
-
-        //    //}
-
-        //    ////var imageName = await createViewModel.ImageFile.GenerateFile(FilePathConstants.CategoryImagePath);
-
-        //    //var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-        //    ////createViewModel.ImageUrl = imageName;
-        //    ///
-        //    var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
-        //    createViewModel.ImageUrl = imageName;
-
-        //    return await base.CreateAsync(createViewModel);
-        //}
-
         //public async Task<IActionResult> Update(int id)
         //{
-        //    var product = (await _productRepository.GetAllAsync(predicate: p => !p.IsDeleted, include: p => p.Include(p => p.ProductImages))).FirstOrDefault(x => x.Id == id);
+        //    var product = await _context.Products.Include(x => x.ProductImages).FirstOrDefaultAsync(x => x.Id == id);
 
         //    if (product is null)
-        //        return NotFound(); 
+        //        return NotFound();
 
 
         //    ProductUpdateViewModel vm = new()
@@ -182,188 +97,151 @@ namespace Pustok.BLL.Services
         //        Id = id,
         //        Name = product.Name,
         //        Price = product.Price,
-        //        ProductCode= product.ProductCode,
-        //        Brand= product.Brand,
-        //        Description= product.Description,
-        //        DiscountPrice= product.DiscountPrice,
-        //        Color= product.Color,
-        //        StockQuantity= product.StockQuantity,
         //        Rating = product.Rating,
-        //        Tax= product.Tax,
-        //        RewardPoint= product.RewardPoint,
-        //        Category= product.Category,
+        //        HoverImagePath = product.ProductImages.FirstOrDefault(x => x.IsHover)?.Path ?? "undifenied",
         //        MainImagePath = product.ProductImages.FirstOrDefault(x => x.IsMain)?.Path ?? "undifenied",
-        //        AdditionalImagePaths = product.ProductImages.Where(x => x.IsMain == false).Select(x => x.Path).ToList(),
-        //        AdditionalImageIds = product.ProductImages.Where(x => x.IsMain == false).Select(x => x.Id).ToList()
+        //        AdditionalImagePaths = product.ProductImages.Where(x => x.IsMain == false && x.IsHover == false).Select(x => x.Path).ToList(),
+        //        AdditionalImageIds = product.ProductImages.Where(x => x.IsMain == false && x.IsHover == false).Select(x => x.Id).ToList()
         //    };
 
         //    return View(vm);
         //}
 
-        //[HttpPost]
-        //public async Task<IActionResult> Update(ProductUpdateViewModel vm)
-        //{
+        public async Task<ProductUpdateViewModel> GetUpdatedProductAsync(int id)
+        {
+            var product = await _productRepository.GetAsync(id);
 
-        //    if (!ModelState.IsValid)
-        //        return View(vm);
+            if (product is null)
+                throw new NotFoundException($"{id}-this category is not found");
 
-
-        //    var existProduct = await _context.Products.Include(x => x.ProductImages).FirstOrDefaultAsync(x => x.Id == vm.Id);
-
-        //    if (existProduct is null)
-        //        return BadRequest();
+            
+            ProductUpdateViewModel vm = _mapper.Map<ProductUpdateViewModel>(product);
 
 
+            return vm;
+        }
 
-        //    #region File Validations
-        //    if (!vm.MainImage?.CheckType() ?? false)
-        //    {
-        //        ModelState.AddModelError("MainImage", "Please enter valid input");
-        //        return View(vm);
-        //    }
+        public override async Task<ProductViewModel> UpdateAsync(ProductUpdateViewModel updateViewModel)
+        {
 
-        //    if (!vm.MainImage?.CheckSize(2) ?? false)
-        //    {
-        //        ModelState.AddModelError("MainImage", "Please enter valid input");
-        //        return View(vm);
-        //    }
+            //var existProduct = await _context.Products.Include(x => x.ProductImages).FirstOrDefaultAsync(x => x.Id == vm.Id);
+            var existProduct= await _productRepository.GetAsync(predicate:p=>p.Id==updateViewModel.Id,include:p=>p.Include(p=>p.ProductImages));
 
-        //    if (!vm.HoverImage?.CheckType() ?? false)
-        //    {
-        //        ModelState.AddModelError("HoverImage", "Please enter valid input");
-        //        return View(vm);
-        //    }
 
-        //    if (!vm.HoverImage?.CheckSize(2) ?? false)
-        //    {
-        //        ModelState.AddModelError("HoverImage", "Please enter valid input");
-        //        return View(vm);
-        //    }
+            if (!updateViewModel.MainImage.IsImage())
+            {
+                throw new Exception("Not an Image");
+            }
+
+            if (!updateViewModel.MainImage.AllowedSize(2))
+            {
+                throw new Exception("Invalid image size");
+            }
 
 
 
-        //    foreach (var image in vm.AdditionalImages)
-        //    {
-        //        if (!image.CheckType())
-        //        {
-        //            ModelState.AddModelError("AdditionalImages", "Please enter valid input");
-        //            return View(vm);
-        //        }
+            foreach (var image in updateViewModel.AdditionalImages)
+            {
+                if (!image.IsImage())
+                {
+                    throw new Exception("Not an Image");
+                }
 
-        //        if (!image.CheckSize(2))
-        //        {
-        //            ModelState.AddModelError("AdditionalImages", "Please enter valid input");
-        //            return View(vm);
-        //        }
-        //    }
-        //    #endregion
+                if (!image.AllowedSize(2))
+                {
+                    throw new Exception("Invalid image size");
+                }
+            }
 
-        //    #region modifie MainImage
-        //    if (vm.MainImage is { })
-        //    {
-        //        var mainImage = existProduct.ProductImages.FirstOrDefault(x => x.IsMain);
+            #region modifie MainImage
+            if (updateViewModel.MainImage is { })
+            {
+                var mainImage = existProduct.ProductImages.FirstOrDefault(x => x.IsMain);
 
-        //        string mainImagePath = await vm.MainImage.CreateImageAsync(FOLDER_PATH);
-        //        if (mainImage != null)
-        //        {
-        //            mainImage.Path.DeleteFile(FOLDER_PATH);
-        //            mainImage!.Path = mainImagePath;
+                //string mainImagePath = await vm.MainImage.CreateImageAsync(FOLDER_PATH);
+                var mainImagePath = await _cloudinaryManager.FileCreateAsync(updateViewModel.MainImage);
 
-        //            _context.ProductImages.Update(mainImage);
-        //        }
-        //        else
-        //        {
-        //            ProductImage newMainImage = new()
-        //            {
-        //                IsMain = true,
-        //                Path = mainImagePath,
-        //                Product = existProduct
-        //            };
+                if (mainImage != null)
+                {
+                    //mainImage.Path.DeleteFile(FOLDER_PATH);
+                    var Isdeleted=await _cloudinaryManager.FileDeleteAsync(mainImagePath);
+                    mainImage!.Path = mainImagePath;
 
-        //            existProduct.ProductImages.Add(newMainImage);
-        //        }
-        //    }
-        //    #endregion
+                    //_context.ProductImages.Update(mainImage);
+                    _productImageRepository.UpdateAsync(mainImage);
+                }
+                else
+                {
+                    ProductImage newMainImage = new()
+                    {
+                        IsMain = true,
+                        Path = mainImagePath,
+                        Product = existProduct
+                    };
 
-        //    #region modifie HoverImage
-        //    if (vm.HoverImage is { })
-        //    {
-        //        var hoverImage = existProduct.ProductImages.FirstOrDefault(x => x.IsHover);
-        //        string hoverImagePath = await vm.HoverImage.CreateImageAsync(FOLDER_PATH);
-
-        //        if (hoverImage is not null)
-        //        {
-        //            hoverImage.Path.DeleteFile(FOLDER_PATH);
-        //            hoverImage.Path = hoverImagePath;
-
-        //            _context.ProductImages.Update(hoverImage);
-        //        }
-        //        else
-        //        {
-        //            ProductImage newHoverImage = new()
-        //            {
-        //                IsHover = true,
-        //                Path = hoverImagePath,
-        //                Product = existProduct
-        //            };
-
-        //            existProduct.ProductImages.Add(newHoverImage);
-        //        }
-        //    }
-
-        //    #endregion
-
-        //    #region delete old images
+                    existProduct.ProductImages.Add(newMainImage);
+                }
+            }
+            #endregion
 
 
-        //    var oldImgIds = existProduct.ProductImages.Where(x => x.IsMain == false && x.IsHover == false).Select(x => x.Id).ToList();
+            #region delete old images
 
 
-        //    foreach (var imageId in oldImgIds)
-        //    {
-
-        //        var isExist = vm.AdditionalImageIds.Any(x => x == imageId);
-
-        //        if (isExist is false)
-        //        {
-        //            var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.Id == imageId);
-
-        //            if (image is { })
-        //            {
-        //                image.Path.DeleteFile(FOLDER_PATH);
-        //                _context.ProductImages.Remove(image);
-        //            }
-        //        }
-
-        //    }
-
-        //    #endregion
-
-        //    #region create new images
-        //    foreach (var image in vm.AdditionalImages)
-        //    {
-        //        string imagePath = await image.CreateImageAsync(FOLDER_PATH);
-
-        //        ProductImage productImage = new()
-        //        {
-        //            Path = imagePath,
-        //            Product = existProduct
-        //        };
-        //        existProduct.ProductImages.Add(productImage);
-
-        //    }
-        //    #endregion
-
-        //    existProduct.Name = vm.Name;
-        //    existProduct.Rating = vm.Rating;
-        //    existProduct.Price = vm.Price;
+            var oldImgIds = existProduct.ProductImages.Where(x => x.IsMain == false).Select(x => x.Id).ToList();
 
 
-        //    await _context.SaveChangesAsync();
+            foreach (var imageId in oldImgIds)
+            {
 
-        //    return RedirectToAction("Index");
+                var isExist = updateViewModel.AdditionalImageIds.Any(x => x == imageId);
 
-        //}
+                if (isExist is false)
+                {
+                    //var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.Id == imageId);
+                    var image=await _productImageRepository.GetAsync(imageId);
+
+                    if (image is { })
+                    {
+                        //image.Path.DeleteFile(FOLDER_PATH);
+                        var isDeleted=await _cloudinaryManager.FileDeleteAsync(image.Path);
+                        //_context.ProductImages.Remove(image);
+                        var deletedImage=await _productImageRepository.DeleteAsync(image);
+                    }
+                }
+
+            }
+
+            #endregion
+
+            #region create new images
+            foreach (var image in updateViewModel.AdditionalImages)
+            {
+                //string imagePath = await image.CreateImageAsync(FOLDER_PATH);
+                var imagePath = await _cloudinaryManager.FileCreateAsync(image);
+
+
+                ProductImage productImage = new()
+                {
+                    Path = imagePath,
+                    Product = existProduct
+                };
+                existProduct.ProductImages.Add(productImage);
+
+            }
+            #endregion
+            _mapper.Map(updateViewModel, existProduct);
+
+
+
+            //await _context.SaveChangesAsync();
+
+            //return RedirectToAction("Index");
+
+            var createdProductViewModel = await base.UpdateAsync(updateViewModel);
+            return createdProductViewModel;
+
+        }
     }
 
 

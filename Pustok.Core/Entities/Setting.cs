@@ -1,4 +1,4 @@
-﻿namespace Pustok.Core.Entities
+﻿ namespace Pustok.Core.Entities
 {
     public class Setting : BaseEntity
     {
