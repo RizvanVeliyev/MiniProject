@@ -8,6 +8,7 @@ using Pustok.DAL.DataContexts;
 using System.Security.Claims;
 using Pustok.BLL.UI.Services.Contracts;
 using Pustok.BLL.ViewModels.SubscribeViewModels;
+using Pustok.BLL.ViewModels.ContactViewModels;
 
 namespace MiniProject.Controllers
 {
@@ -39,6 +40,26 @@ namespace MiniProject.Controllers
             return View(homeViewModel);
 
 
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Contact(ContactViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var body = $"Message: {model.Message}";
+
+                _emailService.SendEmail(model.Email!, $"Message from{model.Name}", body);
+
+                return View();
+            }
+
+            // If the model is not valid, re-render the form with validation errors
+            return View(model);
         }
 
         public async Task<IActionResult> AddToBasket(int id, string? returnUrl)
