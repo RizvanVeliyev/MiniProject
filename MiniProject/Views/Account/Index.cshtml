@@ -1,0 +1,33 @@
+﻿@model List<UserViewModel>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Status</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Username</td>
+                <td>
+                    <form method="post" asp-action="ToggleActivation" asp-route-userId="@user.Id">
+                        <button type="submit" class="btn @(user.IsActive ? "btn-success" : "btn-danger")">
+                            @(user.IsActive ? "Active" : "Inactive")
+                        </button>
+                    </form>
+                </td>
+                <td>@string.Join(", ", user.Roles)</td>
+                <td>
+                    <a asp-action="ChangeRole" asp-route-userId="@user.Id" class="btn btn-primary">Change Role</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
