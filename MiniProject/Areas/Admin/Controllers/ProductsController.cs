@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels.ProductViewModels;
-using Pustok.BLL.ViewModels.SliderViewModels;
 using Pustok.DAL.DataContexts;
 
 namespace MiniProject.Areas.Admin.Controllers
@@ -16,6 +14,7 @@ namespace MiniProject.Areas.Admin.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string FOLDER_PATH = "";
         private readonly IProductService _productService;
+        private readonly
 
         public ProductsController(AppDbContext context, IWebHostEnvironment webHostEnvironment,IProductService productService)
         {
@@ -49,6 +48,8 @@ namespace MiniProject.Areas.Admin.Controllers
                 return View();
             }
             await _productService.CreateAsync(vm);
+
+
 
             return RedirectToAction("Index");
         }

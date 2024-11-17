@@ -13,7 +13,7 @@ using Pustok.Core.Entities;
 
 namespace Pustok.BLL.AutoMapper
 {
-    public class MappingProfile:Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
@@ -25,7 +25,7 @@ namespace Pustok.BLL.AutoMapper
             CreateMap<BasketItem, BasketItemCreateViewModel>().ReverseMap();
             CreateMap<BasketItem, BasketItemUpdateViewModel>().ReverseMap();
             CreateMap<BasketItemUpdateViewModel, BasketItem>()
-           .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.UserId)); 
+           .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.UserId));
 
             CreateMap<Category, CategoryViewModel>().ReverseMap();
             CreateMap<Category, CategoryCreateViewModel>().ReverseMap();
@@ -51,7 +51,7 @@ namespace Pustok.BLL.AutoMapper
             CreateMap<Tag, TagCreateViewModel>().ReverseMap();
             CreateMap<Tag, TagUpdateViewModel>().ReverseMap();
 
-            CreateMap<Product, ProductViewModel>().ReverseMap();
+            CreateMap<Product, ProductViewModel>().ForMember(x => x.MainImagePath, x => x.MapFrom(x => x.ProductImages.FirstOrDefault(x => x.IsMain) != null ? x.ProductImages.FirstOrDefault(x => x.IsMain).Path : string.Empty)).ReverseMap();
             CreateMap<Product, ProductCreateViewModel>().ReverseMap();
             CreateMap<Product, ProductUpdateViewModel>().ReverseMap();
 

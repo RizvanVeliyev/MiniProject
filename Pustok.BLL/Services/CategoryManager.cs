@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Pustok.BLL.Constants;
 using Pustok.BLL.Exceptions;
 using Pustok.BLL.Extensions;
@@ -12,6 +14,7 @@ using Pustok.DAL.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +27,7 @@ namespace Pustok.BLL.Services
         public CategoryManager(ICategoryRepository categoryRepository, IMapper mapper) : base(categoryRepository, mapper)
         {
             _categoryRepository = categoryRepository;
-            _mapper= mapper;
+            _mapper = mapper;
         }
 
 
@@ -37,6 +40,10 @@ namespace Pustok.BLL.Services
         //    return await base.CreateAsync(createViewModel);
         //}
 
+        public override Task<CategoryViewModel?> GetAsync(Expression<Func<Category, bool>> predicate, Func<IQueryable<Category>, IIncludableQueryable<Category, object>>? include = null, Func<IQueryable<Category>, IOrderedQueryable<Category>>? orderBy = null)
+        {
+            return base.GetAsync(predicate, x => x.Include(x => x.Parent!), orderBy);
+        }
         public async Task<CategoryUpdateViewModel> GetUpdatedCategoryAsync(int id)
         {
             var category = await _categoryRepository.GetAsync(id);

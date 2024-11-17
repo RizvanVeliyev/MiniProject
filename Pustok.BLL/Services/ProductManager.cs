@@ -14,14 +14,12 @@ namespace Pustok.BLL.Services
         private readonly IMapper _mapper;
         private readonly CloudinaryManager _cloudinaryManager;
         private readonly IProductRepository _productRepository;
-        private readonly IProductImageRepository _productImageRepository;
-        
-        public ProductManager(IProductRepository productRepository, IMapper mapper,CloudinaryManager cloudinaryManager,IProductImageRepository productImageRepository) : base(productRepository, mapper)
+
+        public ProductManager(IProductRepository productRepository, IMapper mapper, CloudinaryManager cloudinaryManager) : base(productRepository, mapper)
         {
             _mapper = mapper;
             _productRepository = productRepository;
             _cloudinaryManager = cloudinaryManager;
-            _productImageRepository = productImageRepository;
 
         }
         public override async Task<ProductViewModel> CreateAsync(ProductCreateViewModel createViewModel)
@@ -54,6 +52,8 @@ namespace Pustok.BLL.Services
             // Map ProductCreateViewModel to Product entity using AutoMapper
             Product product = _mapper.Map<Product>(createViewModel);
 
+            product.ProductImages = [];
+
             // Upload main image and set as primary
             var mainImagePath = await _cloudinaryManager.FileCreateAsync(createViewModel.MainImage);
             ProductImage mainImage = new()
@@ -68,7 +68,7 @@ namespace Pustok.BLL.Services
             foreach (var image in createViewModel.AdditionalImages)
             {
                 var imagePath = await _cloudinaryManager.FileCreateAsync(image);
-                ProductImage additionalImage = new()  
+                ProductImage additionalImage = new()
                 {
                     IsMain = false,
                     Path = imagePath,
@@ -79,8 +79,12 @@ namespace Pustok.BLL.Services
 
             // Save the product using the base method
             //var productLastVersion = _mapper.Map<ProductCreateViewModel, Product>(createViewModel);
-            var createdProductViewModel = await base.CreateAsync(createViewModel);
-            return createdProductViewModel;
+
+
+            await _productRepository.CreateAsync(product);
+
+            var productViewModel = _mapper.Map<ProductViewModel>(product);
+            return productViewModel;
         }
 
 
@@ -114,7 +118,7 @@ namespace Pustok.BLL.Services
             if (product is null)
                 throw new NotFoundException($"{id}-this category is not found");
 
-            
+
             ProductUpdateViewModel vm = _mapper.Map<ProductUpdateViewModel>(product);
 
 
@@ -125,8 +129,8 @@ namespace Pustok.BLL.Services
         {
 
             //var existProduct = await _context.Products.Include(x => x.ProductImages).FirstOrDefaultAsync(x => x.Id == vm.Id);
-            var existProduct= await _productRepository.GetAsync(predicate:p=>p.Id==updateViewModel.Id,include:p=>p.Include(p=>p.ProductImages));
-
+            var existProduct = await _productRepository.GetAsync(predicate: p => p.Id == updateViewModel.Id, include: p => p.Include(p => p.ProductImages));
+            if (existProduct == null) throw new Exception("product not found");
 
             if (!updateViewModel.MainImage.IsImage())
             {
@@ -164,11 +168,11 @@ namespace Pustok.BLL.Services
                 if (mainImage != null)
                 {
                     //mainImage.Path.DeleteFile(FOLDER_PATH);
-                    var Isdeleted=await _cloudinaryManager.FileDeleteAsync(mainImagePath);
+                    var Isdeleted = await _cloudinaryManager.FileDeleteAsync(mainImagePath);
                     mainImage!.Path = mainImagePath;
 
                     //_context.ProductImages.Update(mainImage);
-                    _productImageRepository.UpdateAsync(mainImage);
+                    //_productImageRepository.UpdateAsync(mainImage);
                 }
                 else
                 {
@@ -199,14 +203,16 @@ namespace Pustok.BLL.Services
                 if (isExist is false)
                 {
                     //var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.Id == imageId);
-                    var image=await _productImageRepository.GetAsync(imageId);
+                    //var image=await _productImageRepository.GetAsync(imageId);
+                    var image = existProduct.ProductImages.FirstOrDefault(x => x.Id == imageId);
+
 
                     if (image is { })
                     {
                         //image.Path.DeleteFile(FOLDER_PATH);
                         var isDeleted=await _cloudinaryManager.FileDeleteAsync(image.Path);
                         //_context.ProductImages.Remove(image);
-                        var deletedImage=await _productImageRepository.DeleteAsync(image);
+                        existProduct.ProductImages.Remove(image);
                     }
                 }
 
@@ -238,8 +244,13 @@ namespace Pustok.BLL.Services
 
             //return RedirectToAction("Index");
 
-            var createdProductViewModel = await base.UpdateAsync(updateViewModel);
-            return createdProductViewModel;
+            //var updatedProductViewModel = await base.UpdateAsync(updateViewModel);
+            //return updatedProductViewModel;
+
+            await _productRepository.UpdateAsync(existProduct);
+
+            var productViewModel = _mapper.Map<ProductViewModel>(existProduct);
+            return productViewModel;
 
         }
     }

@@ -6,7 +6,7 @@ using Pustok.BLL.ViewModels.SliderViewModels;
 
 namespace MiniProject.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin,Moderator")]
+    //[Authorize(Roles = "Admin,Moderator")]
 
     public class SlidersController : AdminController
     {
@@ -19,7 +19,7 @@ namespace MiniProject.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var sliderList = await _sliderService.GetAllAsync();
+            var sliderList = await _sliderService.GetAllAsync(predicate:s=>s.isDeleted==false);
             return View(sliderList);
         }
 
@@ -63,7 +63,7 @@ namespace MiniProject.Areas.Admin.Controllers
 
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _sliderService.DeleteAsync(id);

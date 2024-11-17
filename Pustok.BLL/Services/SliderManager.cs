@@ -2,8 +2,11 @@
 using Pustok.BLL.Exceptions;
 using Pustok.BLL.Extensions;
 using Pustok.BLL.Services.Contracts;
+using Pustok.BLL.ViewModels.ProductViewModels;
 using Pustok.BLL.ViewModels.SliderViewModels;
+using Pustok.BLL.ViewModels.TagViewModels;
 using Pustok.Core.Entities;
+using Pustok.DAL.Repositories;
 using Pustok.DAL.Repositories.Contracts;
 
 namespace Pustok.BLL.Services
@@ -39,24 +42,25 @@ namespace Pustok.BLL.Services
             var imageName = await _cloudinaryManager.FileCreateAsync(createViewModel.ImageFile);
             createViewModel.ImageUrl = imageName;
 
+
             return await base.CreateAsync(createViewModel);
         }
 
-        public override async Task<SliderViewModel> DeleteAsync(int id)
-        {
-            var slider = await _sliderRepository.GetAsync(id);
+        //public override async Task<SliderViewModel> DeleteAsync(int id)
+        //{
+        //    var slider = await _sliderRepository.GetAsync(id);
 
-            if (slider is null)
-                throw new NotFoundException("This category is not found");
+        //    if (slider is null)
+        //        throw new NotFoundException("This category is not found");
 
-            slider.isDeleted = true;
+        //    slider.isDeleted = true;
 
-            await _sliderRepository.UpdateAsync(slider);
+        //    await _sliderRepository.UpdateAsync(slider);
 
-            var vm = _mapper.Map<SliderViewModel>(slider);
+        //    var vm = _mapper.Map<SliderViewModel>(slider);
 
-            return vm;
-        }
+        //    return vm;
+        //}
 
         public async Task<SliderUpdateViewModel> GetUpdatedSliderAsync(int id)
         {
@@ -99,6 +103,21 @@ namespace Pustok.BLL.Services
 
 
             return await base.UpdateAsync(updateViewModel);
+        }
+
+
+        public override async Task<SliderViewModel> DeleteAsync(int id)
+        {
+            var slider = await _sliderRepository.GetAsync(id);
+
+            if (slider is null)
+                throw new NotFoundException($"{id}-this tag is not found");
+
+            slider.isDeleted = true;
+            await _sliderRepository.UpdateAsync(slider);
+
+            var sliderViewModel = _mapper.Map<SliderViewModel>(slider);
+            return sliderViewModel;
         }
     }
 

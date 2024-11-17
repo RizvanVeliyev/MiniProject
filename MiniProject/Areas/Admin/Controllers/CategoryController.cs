@@ -25,7 +25,7 @@ namespace MiniProject.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var categories= await _categoryService.GetAllAsync(predicate:c=>c.ParentId==null);
+            var categories = await _categoryService.GetAllAsync(predicate: c => c.ParentId == null);
             var model = new CategoryCreateViewModel
             {
                 ParentCategories = categories.Select(c => new SelectListItem
@@ -63,7 +63,7 @@ namespace MiniProject.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var categories = await _categoryService.GetAllAsync(predicate: c => c.ParentId == null && c.Id != id); 
+            var categories = await _categoryService.GetAllAsync(predicate: c => c.ParentId == null && c.Id != id);
             var model = new CategoryUpdateViewModel
             {
                 Id = category.Id,
@@ -112,12 +112,12 @@ namespace MiniProject.Areas.Admin.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var category = await _categoryService.GetAsync(id);
+            var category = await _categoryService.GetAsync(x => x.Id == id);
             return View(category);
 
         }
 
-        
+
 
 
         public async Task<IActionResult> Delete(int id)

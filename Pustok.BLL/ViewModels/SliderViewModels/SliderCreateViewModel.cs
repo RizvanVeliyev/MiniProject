@@ -7,7 +7,7 @@ namespace Pustok.BLL.ViewModels.SliderViewModels
         public required string Title { get; set; }
         public decimal Price { get; set; }
         public string? Description { get; set; }
-        public required string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public required IFormFile ImageFile { get; set; }
     }
 
