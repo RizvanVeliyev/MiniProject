@@ -57,7 +57,9 @@ namespace Pustok.BLL.AutoMapper
 
             CreateMap<AppUser, RegisterViewModel>().ReverseMap();
             CreateMap<AppUser, LoginViewModel>().ReverseMap();
-            CreateMap<AppUser,UserViewModel>().ReverseMap();
+            //CreateMap<AppUser,UserViewModel>().ReverseMap();
+            CreateMap<AppUser, UserViewModel>().ForMember(dest => dest.Roles, opt => opt.Ignore()).ReverseMap();
+
             CreateMap<AppUser, ChangeRoleViewModel>().ReverseMap();
 
         }
