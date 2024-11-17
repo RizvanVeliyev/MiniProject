@@ -14,15 +14,18 @@ namespace MiniProject.Areas.Admin.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string FOLDER_PATH = "";
         private readonly IProductService _productService;
-        private readonly
+        private readonly IEmailService _emailService;
+        private readonly ISubscribeService _subscribeService;
 
-        public ProductsController(AppDbContext context, IWebHostEnvironment webHostEnvironment,IProductService productService)
+        public ProductsController(AppDbContext context, IWebHostEnvironment webHostEnvironment,IProductService productService, IEmailService emailService,ISubscribeService subscribeService)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _productService = productService;
 
             FOLDER_PATH = Path.Combine(_webHostEnvironment.WebRootPath, "assets", "images");
+            _emailService = emailService;
+            _subscribeService = subscribeService;
         }
 
         public async Task<IActionResult> Index()
@@ -49,6 +52,15 @@ namespace MiniProject.Areas.Admin.Controllers
             }
             await _productService.CreateAsync(vm);
 
+            string body = "yeni product yaratdig ay musteri!";
+
+            var subscribes = await _subscribeService.GetAllAsync(predicate: s => s.isDeleted == false);
+
+            foreach (var item in subscribes)
+            {
+                _emailService.SendEmail(item.Email!, "Salam", body);
+
+            }
 
 
             return RedirectToAction("Index");

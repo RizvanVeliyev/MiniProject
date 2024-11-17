@@ -160,52 +160,8 @@ Home Slider Tab
                             {"breakpoint":320, "settings": {"slidesToShow": 1} }
                         ]'>
                         <h2>Products</h2>
-                        @foreach (var product in Model.Products)
-                        {
-        <div class="single-slide">
-            <div class="product-card">
-                <div class="product-header">
-                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="author">
-                                            @product.Name
-                    </a>
-                    <h3>
-                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                                                @product.Name
-                        </a>
-                    </h3>
-                </div>
-                <div class="product-card--body">
-                    <div class="card-image">
-                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                            <img src="@product.MainImagePath" alt="@product.Name">
-                        </a>
-                        <div class="hover-contents">
-                            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="hover-image">
-                                <img src="@product.MainImagePath" alt="Hover Image">
-                            </a>
-                            <div class="hover-btns">
-                                <a href="cart.html" class="single-btn">
-                                    <i class="fas fa-shopping-basket"></i>
-                                </a>
-                                <a href="wishlist.html" class="single-btn">
-                                    <i class="fas fa-heart"></i>
-                                </a>
-                                <a href="compare.html" class="single-btn">
-                                    <i class="fas fa-random"></i>
-                                </a>
-                                <a href="#" data-toggle="modal" data-target="#quickModal" class="single-btn">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="price-block">
-                        <span class="price">£@product.Price</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-                        }
+                      @await Html.PartialAsync("~/Views/Products/_SearchResults.cshtml", Model)
+
 
                     </div>
                 </div>
@@ -1976,3 +1932,59 @@ Brands Slider
         </div>
     </div>
 </section>
+
+@* @section Scripts {
+        <script>
+            // Ajax ilə axtarış
+            document.querySelector('.header-search-block input').addEventListener('input', function () {
+                const query = this.value;
+
+                if (query.trim().length > 0) {
+                    fetch(`/Products/Search?query=${query}`)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById('searchModalBody').innerHTML = data;
+                            $('#searchModal').modal('show');
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    // Axtarış sahəsi boşdursa modalı bağla
+                    $('#searchModal').modal('hide');
+                }
+            });
+        </script>
+}
+ *@
+
+ @section Scripts{
+          <script>
+            // Enter düyməsi ilə axtarış
+            document.getElementById('searchInput').addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    searchProducts();
+                }
+            });
+
+            // Search düyməsi ilə axtarış
+            document.getElementById('searchButton').addEventListener('click', function () {
+                searchProducts();
+            });
+
+            function searchProducts() {
+                const query = document.getElementById('searchInput').value;
+
+                if (query.trim().length > 0) {
+                    fetch(`/Products/Search?query=${query}`)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById('searchModalBody').innerHTML = data;
+                            $('#searchModal').modal('show');
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    // Axtarış sahəsi boşdursa modalı bağla
+                    $('#searchModal').modal('hide');
+                }
+            }
+        </script>
+ }
