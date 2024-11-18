@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Pustok.BLL.Services.Contracts;
 using Pustok.BLL.ViewModels;
 using Pustok.Core.Entities;
+using Pustok.Core.Paging;
 using Pustok.DAL.Repositories.Contracts;
 using System.Linq.Expressions;
 
@@ -45,10 +46,13 @@ namespace Pustok.BLL.Services
 
         }
 
-        public virtual async Task<List<TViewModel>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null)
+        public virtual async Task<Paginate<TViewModel>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, 
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, 
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            int index = 0, int size = 10, bool enableTracking = true)
         {
-            var entityList = await _repository.GetAllAsync(predicate, include, orderBy);
-            var viewModels = _mapper.Map<List<TViewModel>>(entityList);
+            var entityList = await _repository.GetAllAsync(predicate, include, orderBy,index,size,enableTracking);
+            var viewModels = _mapper.Map<Paginate<TViewModel>>(entityList);
             return viewModels;
         }
 

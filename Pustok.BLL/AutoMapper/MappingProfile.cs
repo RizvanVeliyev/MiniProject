@@ -10,6 +10,7 @@ using Pustok.BLL.ViewModels.SliderViewModels;
 using Pustok.BLL.ViewModels.SubscribeViewModels;
 using Pustok.BLL.ViewModels.TagViewModels;
 using Pustok.Core.Entities;
+using Pustok.Core.Paging;
 
 namespace Pustok.BLL.AutoMapper
 {
@@ -61,6 +62,9 @@ namespace Pustok.BLL.AutoMapper
             CreateMap<AppUser, UserViewModel>().ForMember(dest => dest.Roles, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<AppUser, ChangeRoleViewModel>().ReverseMap();
+
+            CreateMap(typeof(Paginate<>), typeof(Paginate<>)).ConvertUsing(typeof(PaginateConverter<,>));
+
 
         }
     }
