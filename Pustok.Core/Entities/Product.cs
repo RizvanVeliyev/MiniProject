@@ -16,6 +16,7 @@
         public List<ProductImage> ProductImages { get; set; } = new();
         public int CategoryId { get; set; }
         public required Category Category { get; set; }
+
         public decimal Tax { get; set; }
         public int RewardPoint { get; set; }
 
