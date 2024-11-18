@@ -31,7 +31,7 @@ namespace Pustok.BLL.UI.Services
         public async Task<HomeViewModel> GetHomeViewModelAsync()
         {
             var categories = await _categoryService.GetAllAsync(predicate: c => !c.IsDeleted);
-            var products = await _productService.GetAllAsync(predicate: p => !p.IsDeleted, include: p => p.Include(p => p.ProductImages),size:2);
+            var products = await _productService.GetAllAsync(predicate: p => !p.IsDeleted, include: p => p.Include(p => p.ProductImages));
             var sliders = await _sliderService.GetAllAsync(predicate: p => !p.isDeleted);
             var services = await _serviceService.GetAllAsync(predicate: p => !p.IsDeleted);
 

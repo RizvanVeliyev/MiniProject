@@ -1,0 +1,65 @@
+﻿@using Pustok.Core.Paging
+@model Paginate<ProductViewModel> 
+
+
+<div class="shop-product-wrap grid with-pagination row space-db--30 shop-border">
+    <div id="productGrid" class="row">
+        @foreach (var product in Model.Items)
+        {
+            <div class="col-lg-4 col-sm-6">
+                <div class="product-card">
+                    <div class="product-grid-content">
+                        <div class="product-header">
+                            <a href="#" class="author">@product.Brand</a>
+                            <h3>
+                                <a href="/ProductDetails/@product.Id">@product.Name</a>
+                            </h3>
+                        </div>
+                        <div class="product-card--body">
+                            <div class="card-image">
+                                <img src="@product.MainImagePath" alt="@product.Name">
+                            </div>
+                            <div class="price-block">
+                                <span class="price">£@product.Price</span>
+                                @if (product.DiscountPrice != null)
+                                {
+                                    <del class="price-old">£@product.DiscountPrice</del>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!-- Pagination Block -->
+<div class="row pt--30">
+    <div class="col-md-12">
+        <div class="pagination-block">
+            <ul class="pagination-btns flex-center">
+                <li>
+                    <a href="#" class="single-btn prev-btn" onclick="updatePage(@(Model.Index))">|<i class="zmdi zmdi-chevron-left"></i></a>
+                </li>
+                <li>
+                    <a href="#" class="single-btn prev-btn" onclick="updatePage(@(Model.Index - 1))"><i class="zmdi zmdi-chevron-left"></i></a>
+                </li>
+
+                @for (int i = 0; i < Model.Pages; i++)
+                {
+                    <li class="@(i == Model.Index ? "active" : "")">
+                        <a href="#" class="single-btn" onclick="updatePage(@(i + 1))">@((i + 1))</a>
+                    </li>
+                }
+
+                <li>
+                    <a href="#" class="single-btn next-btn" onclick="updatePage(@(Model.Index + 1))"><i class="zmdi zmdi-chevron-right"></i></a>
+                </li>
+                <li>
+                    <a href="#" class="single-btn next-btn" onclick="updatePage(@(Model.Pages))"><i class="zmdi zmdi-chevron-right"></i>|</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>

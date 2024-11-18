@@ -3,6 +3,8 @@ using Pustok.BLL.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Pustok.BLL.ViewModels.ProductViewModels;
 using Pustok.BLL.UI.ViewModels;
+using Pustok.Core.Paging;
+using AutoMapper;
 
 
 namespace MiniProject.Controllers
@@ -10,10 +12,12 @@ namespace MiniProject.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IMapper _mapper;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService,IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
 
        
@@ -44,9 +48,30 @@ namespace MiniProject.Controllers
             return PartialView("_SearchResults", homeViewModel);
         }
 
-        public IActionResult ShopGrid()
+        public async Task<IActionResult> ShopGrid(int pageIndex = 1, int pageSize = 3)
         {
-            return View();
+            var products = await _productService.GetAllAsync(
+                predicate: p => !p.IsDeleted,
+                include: p => p.Include(p => p.ProductImages),
+                index: pageIndex - 1,  // Səhifə sıfırdan başlayır
+                size: pageSize
+            );
+
+            var totalCount = products.Count;
+
+            var model = new Paginate<ProductViewModel>
+            {
+                Items = products.Items,
+                Count = totalCount,
+                Size = pageSize,
+                Index = pageIndex - 1,
+                Pages = (int)Math.Ceiling((double)totalCount / pageSize)
+            };
+
+            // Yalnız partial view qaytarılır
+            return View("ShopGrid", model);
         }
+
+
     }
 }
