@@ -73,5 +73,12 @@ namespace MiniProject.Controllers
         }
 
 
+        public async Task<IActionResult> GetProductsByCategory(int categoryId)
+        {
+            var products = await _productService.GetAllAsync(predicate: p => p.CategoryId == categoryId);
+
+            return PartialView("_ProductListPartial", products);
+        }
+
     }
 }
