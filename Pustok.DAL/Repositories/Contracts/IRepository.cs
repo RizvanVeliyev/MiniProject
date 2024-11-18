@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using Pustok.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Pustok.Core.Paging;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pustok.DAL.Repositories.Contracts
 {
@@ -13,7 +9,7 @@ namespace Pustok.DAL.Repositories.Contracts
     {
         Task<T?> GetAsync(int id);
         Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, bool IsTracking = true);
-        Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null);
+        Task<Paginate<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, int index = 0, int size = 10, bool enableTracking = true);
         Task<T> CreateAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task<T> DeleteAsync(T entity);

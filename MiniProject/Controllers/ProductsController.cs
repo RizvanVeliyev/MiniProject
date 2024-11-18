@@ -43,5 +43,10 @@ namespace MiniProject.Controllers
 
             return PartialView("_SearchResults", homeViewModel);
         }
+
+        public IActionResult ShopGrid()
+        {
+            return View();
+        }
     }
 }

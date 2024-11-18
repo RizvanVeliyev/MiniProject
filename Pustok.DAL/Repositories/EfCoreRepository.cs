@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Pustok.Core.Entities;
+using Pustok.Core.Paging;
 using Pustok.DAL.DataContexts;
 using Pustok.DAL.Repositories.Contracts;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Pustok.DAL.Repositories
@@ -30,9 +32,14 @@ namespace Pustok.DAL.Repositories
             return entityEntry.Entity;
         }
 
-        public virtual async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
+        public virtual async Task<Paginate<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, 
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            int index = 0, int size = 10, bool enableTracking = true)
         {
             IQueryable<T> query = _appDbContext.Set<T>();
+            if (!enableTracking) 
+                query = query.AsNoTracking();
 
             if (predicate != null)
                 query = query.Where(predicate);
@@ -42,7 +49,7 @@ namespace Pustok.DAL.Repositories
                 query = orderBy(query);
 
             var result = await query.ToListAsync();
-            return result;
+            return await query.ToPaginateAsync(index, size);
 
         }
 
