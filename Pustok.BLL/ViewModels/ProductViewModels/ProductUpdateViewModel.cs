@@ -18,7 +18,6 @@ namespace Pustok.BLL.ViewModels.ProductViewModels
         public int StockQuantity { get; set; }
         public decimal Rating { get; set; }
         public int CategoryId { get; set; }
-        public required Category Category { get; set; }
         public decimal Tax { get; set; }
         public int RewardPoint { get; set; }
         public ICollection<TagProduct>? ProductTags { get; set; }

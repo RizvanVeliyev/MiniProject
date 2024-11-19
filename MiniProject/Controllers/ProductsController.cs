@@ -28,7 +28,7 @@ namespace MiniProject.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var product = await _productService.GetAsync(predicate:p=>p.Id==id,include: p => p.Include(p=>p.ProductTags!).ThenInclude(p=>p.Tag));
+            var product = await _productService.GetAsync(predicate:p=>p.Id==id,include: p => p.Include(p=>p.ProductTags!).ThenInclude(p=>p.Tag).Include(x=>x.ProductImages));
             if(product == null ) return NotFound();
             return View(product);
         }
@@ -38,7 +38,7 @@ namespace MiniProject.Controllers
         {
            
            
-            var products = await _productService.GetAllAsync(p => p.IsDeleted == false && p.Name.Contains(query));
+            var products = await _productService.GetAllAsync(p => p.IsDeleted == false && p.Name.Contains(query), include: p => p.Include(p => p.ProductImages));
 
             var homeViewModel = new HomeViewModel
             {

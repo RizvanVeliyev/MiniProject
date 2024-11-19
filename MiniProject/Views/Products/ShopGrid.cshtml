@@ -271,7 +271,7 @@
             fetch(url)
                 .then(response => response.text())
                 .then(html => {
-                    document.getElementById("productGrid").innerHTML = html; // Yalnız məhsul siyahısını yeniləyirik
+                    document.querySelector("html").innerHTML = html; // Yalnız məhsul siyahısını yeniləyirik
                     currentPage = page; // Cari səhifəni yeniləyirik
                 })
                 .catch(err => console.error(err));
